@@ -20,11 +20,13 @@ def download_image(link, path):
 def download_comics():
 
     response = requests.get('https://xkcd.com/info.0.json')
+    response.raise_for_status()
     comics_num = response.json()['num']
 
     random_id = random.randint(1, comics_num)
 
     response = requests.get('https://xkcd.com/{}/info.0.json'.format(random_id))
+    response.raise_for_status()
     response_json = response.json()
 
     img_link = response_json['img']

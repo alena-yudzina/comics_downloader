@@ -14,7 +14,11 @@ def get_upload_url(access_token, group_id):
         'v': 5.131,
     }
     response = requests.get('https://api.vk.com/method/photos.getWallUploadServer', params=params)
-    return response.json()['response']['upload_url']
+    response.raise_for_status()
+    response_json = response.json()
+    if response_json.get('error'):
+        raise Exception(response_json['error']['error_msg'])
+    return response_json['response']['upload_url']
 
 
 def upload_img_to_server(img_name, access_token, group_id):
@@ -24,7 +28,11 @@ def upload_img_to_server(img_name, access_token, group_id):
             'photo': file
         }
         response = requests.post(url, files=files)
-    return response.json()
+    response.raise_for_status()
+    response_json = response.json()
+    if response_json.get('error'):
+        raise Exception(response_json['error']['error_msg'])
+    return response_json
 
 
 def upload_img_to_album(access_token, group_id, user_id, server_response):
@@ -38,9 +46,12 @@ def upload_img_to_album(access_token, group_id, user_id, server_response):
         'v': 5.131,
     }
     group_response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', params=group_params)
-    group_response = group_response.json()
-    owner_id = group_response['response'][0]['owner_id']
-    media_id = group_response['response'][0]['id']
+    group_response.raise_for_status()
+    group_response_json = group_response.json()
+    if group_response_json.get('error'):
+        raise Exception(group_response_json['error']['error_msg'])
+    owner_id = group_response_json['response'][0]['owner_id']
+    media_id = group_response_json['response'][0]['id']
     return owner_id, media_id
 
 
@@ -53,7 +64,10 @@ def upload_img_on_wall(access_token, group_id, comment, owner_id, media_id):
         'attachments': 'photo{}_{}'.format(owner_id, media_id),
         'v': 5.131,
     }
-    requests.post('https://api.vk.com/method/wall.post', params=wall_params)
+    response = requests.post('https://api.vk.com/method/wall.post', params=wall_params)
+    response_json = response.json()
+    if response_json.get('error'):
+        raise Exception(response_json['error']['error_msg'])
 
 
 def publish_comics(access_token, group_id, user_id, comics_desc):
@@ -71,10 +85,13 @@ def main():
     access_token = os.environ['ACCESS_TOKEN']
     user_id = os.environ['USER_ID']
     group_id = os.environ['GROUP_ID']
-
     comics_desc = download_comics()
-    publish_comics(access_token, group_id, user_id, comics_desc)
-    os.remove(comics_desc['img_name'])
+    try:
+        publish_comics(access_token, group_id, user_id, comics_desc)
+    except Exception as Err:
+        print(Err)
+    finally:
+        os.remove(comics_desc['img_name'])
 
 
 if __name__ == '__main__':
