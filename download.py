@@ -40,7 +40,4 @@ def download_comics():
 
     download_image(img_link, img_name)
 
-    return {
-        'img_name': img_name,
-        'comment': comment
-    }
+    return img_name, comment

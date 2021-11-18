@@ -70,10 +70,7 @@ def upload_img_on_wall(access_token, group_id, comment, owner_id, media_id):
         raise Exception(response_json['error']['error_msg'])
 
 
-def publish_comics(access_token, group_id, user_id, comics_desc):
-
-    img_name = comics_desc['img_name']
-    comment = comics_desc['comment']
+def publish_comics(access_token, group_id, user_id, img_name, comment):
     
     server_response = upload_img_to_server(img_name, access_token, group_id)
     owner_id, media_id = upload_img_to_album(access_token, group_id, user_id, server_response)
@@ -85,13 +82,13 @@ def main():
     access_token = os.environ['ACCESS_TOKEN']
     user_id = os.environ['USER_ID']
     group_id = os.environ['GROUP_ID']
-    comics_desc = download_comics()
+    img_name, comment = download_comics()
     try:
-        publish_comics(access_token, group_id, user_id, comics_desc)
+        publish_comics(access_token, group_id, user_id, img_name, comment)
     except Exception as Err:
         print(Err)
     finally:
-        os.remove(comics_desc['img_name'])
+        os.remove(img_name)
 
 
 if __name__ == '__main__':
