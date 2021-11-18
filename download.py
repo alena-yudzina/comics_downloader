@@ -17,12 +17,15 @@ def download_image(link, path):
         img.write(response.content)
 
 
-def download_comics():
-
+def get_comics_amount():
     response = requests.get('https://xkcd.com/info.0.json')
     response.raise_for_status()
-    comics_num = response.json()['num']
+    return response.json()['num']
 
+
+def download_comics():
+
+    comics_num = get_comics_amount()
     random_id = random.randint(1, comics_num)
 
     response = requests.get('https://xkcd.com/{}/info.0.json'.format(random_id))
