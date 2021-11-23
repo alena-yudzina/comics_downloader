@@ -6,9 +6,13 @@ from dotenv import load_dotenv
 from download import download_random_comics
 
 
+class VKError(Exception):
+    pass
+
+
 def check_for_errors(response_description):
     if response_description.get('error'):
-        raise Exception(response_description['error']['error_msg'])
+        raise VKError(response_description['error']['error_msg'])
 
 
 def get_upload_url(access_token, group_id):
@@ -102,8 +106,10 @@ def main():
     img_name, comment = download_random_comics()
     try:
         publish_comics(access_token, group_id, user_id, img_name, comment)
-    except Exception as Err:
-        print(Err)
+    except VKError as Err:
+        print('Проблемы с VK:', Err)
+    except requests.exceptions.RequestException as Err:
+        print('Проблемы с соединением:', Err)
     finally:
         os.remove(img_name)
 
