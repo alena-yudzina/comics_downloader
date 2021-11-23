@@ -30,10 +30,10 @@ def download_comics():
 
     response = requests.get('https://xkcd.com/{}/info.0.json'.format(random_id))
     response.raise_for_status()
-    response_json = response.json()
+    сomics_description = response.json()
 
-    img_link = response_json['img']
-    comment = response_json['alt']
+    img_link = сomics_description['img']
+    comment = сomics_description['alt']
 
     img_ext = get_extension(img_link)
     img_name = '{}{}'.format(random_id, img_ext)
