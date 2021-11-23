@@ -77,6 +77,7 @@ def upload_img_on_wall(access_token, group_id, comment, owner_id, media_id):
         'https://api.vk.com/method/wall.post',
         params=wall_params
     )
+    response.raise_for_status()
     response_description = response.json()
     check_for_errors(response_description)
 
