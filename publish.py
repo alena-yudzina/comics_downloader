@@ -3,7 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from download import download_comics
+from download import download_random_comics
 
 
 def check_for_errors(response_description):
@@ -38,14 +38,14 @@ def upload_img_to_server(img_name, access_token, group_id):
     return response_description
 
 
-def upload_img_to_album(access_token, group_id, user_id, server_response):
+def upload_img_to_album(access_token, group_id, user_id, photo_description, server, hash):
     group_params = {
         'access_token': access_token,
         'user_id': user_id,
         'group_id': group_id,
-        'photo': server_response['photo'],
-        'server': server_response['server'],
-        'hash': server_response['hash'],
+        'photo': photo_description,
+        'server': server,
+        'hash': hash,
         'v': 5.131,
     }
     group_response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', params=group_params)
@@ -74,7 +74,12 @@ def upload_img_on_wall(access_token, group_id, comment, owner_id, media_id):
 def publish_comics(access_token, group_id, user_id, img_name, comment):
     
     server_response = upload_img_to_server(img_name, access_token, group_id)
-    owner_id, media_id = upload_img_to_album(access_token, group_id, user_id, server_response)
+    photo_description = server_response['photo']
+    server = server_response['server']
+    hash = server_response['hash']
+    owner_id, media_id = upload_img_to_album(
+        access_token, group_id, user_id, photo_description, server, hash
+    )
     upload_img_on_wall(access_token, group_id, comment, owner_id, media_id)
 
 
@@ -83,7 +88,7 @@ def main():
     access_token = os.environ['ACCESS_TOKEN']
     user_id = os.environ['USER_ID']
     group_id = os.environ['GROUP_ID']
-    img_name, comment = download_comics()
+    img_name, comment = download_random_comics()
     try:
         publish_comics(access_token, group_id, user_id, img_name, comment)
     except Exception as Err:
