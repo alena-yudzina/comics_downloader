@@ -18,7 +18,10 @@ def get_upload_url(access_token, group_id):
         'group_id': group_id,
         'v': 5.131,
     }
-    response = requests.get('https://api.vk.com/method/photos.getWallUploadServer', params=params)
+    response = requests.get(
+        'https://api.vk.com/method/photos.getWallUploadServer',
+        params=params
+    )
     response.raise_for_status()
     response_description = response.json()
     check_for_errors(response_description)
@@ -38,7 +41,8 @@ def upload_img_to_server(img_name, access_token, group_id):
     return response_description
 
 
-def upload_img_to_album(access_token, group_id, user_id, photo_description, server, hash):
+def upload_img_to_album(access_token, group_id, user_id,
+                        photo_description, server, hash):
     group_params = {
         'access_token': access_token,
         'user_id': user_id,
@@ -48,7 +52,10 @@ def upload_img_to_album(access_token, group_id, user_id, photo_description, serv
         'hash': hash,
         'v': 5.131,
     }
-    group_response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', params=group_params)
+    group_response = requests.post(
+        'https://api.vk.com/method/photos.saveWallPhoto',
+        params=group_params
+    )
     group_response.raise_for_status()
     group_response_description = group_response.json()
     check_for_errors(group_response_description)
@@ -66,13 +73,16 @@ def upload_img_on_wall(access_token, group_id, comment, owner_id, media_id):
         'attachments': 'photo{}_{}'.format(owner_id, media_id),
         'v': 5.131,
     }
-    response = requests.post('https://api.vk.com/method/wall.post', params=wall_params)
+    response = requests.post(
+        'https://api.vk.com/method/wall.post',
+        params=wall_params
+    )
     response_description = response.json()
     check_for_errors(response_description)
 
 
 def publish_comics(access_token, group_id, user_id, img_name, comment):
-    
+
     server_response = upload_img_to_server(img_name, access_token, group_id)
     photo_description = server_response['photo']
     server = server_response['server']

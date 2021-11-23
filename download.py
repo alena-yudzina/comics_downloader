@@ -28,7 +28,9 @@ def download_random_comics():
     comics_num = get_comics_amount()
     random_id = random.randint(1, comics_num)
 
-    response = requests.get('https://xkcd.com/{}/info.0.json'.format(random_id))
+    response = requests.get(
+        'https://xkcd.com/{}/info.0.json'.format(random_id)
+    )
     response.raise_for_status()
     сomics_description = response.json()
 
