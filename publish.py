@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 from download import download_comics
 
 
+def check_for_errors(response_description):
+    if response_description.get('error'):
+        raise Exception(response_description['error']['error_msg'])
+
+
 def get_upload_url(access_token, group_id):
 
     params = {
@@ -16,8 +21,7 @@ def get_upload_url(access_token, group_id):
     response = requests.get('https://api.vk.com/method/photos.getWallUploadServer', params=params)
     response.raise_for_status()
     response_description = response.json()
-    if response_description.get('error'):
-        raise Exception(response_description['error']['error_msg'])
+    check_for_errors(response_description)
     return response_description['response']['upload_url']
 
 
@@ -30,8 +34,7 @@ def upload_img_to_server(img_name, access_token, group_id):
         response = requests.post(url, files=files)
     response.raise_for_status()
     response_description = response.json()
-    if response_description.get('error'):
-        raise Exception(response_description['error']['error_msg'])
+    check_for_errors(response_description)
     return response_description
 
 
@@ -48,8 +51,7 @@ def upload_img_to_album(access_token, group_id, user_id, server_response):
     group_response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', params=group_params)
     group_response.raise_for_status()
     group_response_description = group_response.json()
-    if group_response_description.get('error'):
-        raise Exception(group_response_description['error']['error_msg'])
+    check_for_errors(group_response_description)
     owner_id = group_response_description['response'][0]['owner_id']
     media_id = group_response_description['response'][0]['id']
     return owner_id, media_id
@@ -66,8 +68,7 @@ def upload_img_on_wall(access_token, group_id, comment, owner_id, media_id):
     }
     response = requests.post('https://api.vk.com/method/wall.post', params=wall_params)
     response_description = response.json()
-    if response_description.get('error'):
-        raise Exception(response_description['error']['error_msg'])
+    check_for_errors(response_description)
 
 
 def publish_comics(access_token, group_id, user_id, img_name, comment):
