@@ -47,11 +47,11 @@ def upload_img_to_album(access_token, group_id, user_id, server_response):
     }
     group_response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', params=group_params)
     group_response.raise_for_status()
-    group_response_json = group_response.json()
-    if group_response_json.get('error'):
-        raise Exception(group_response_json['error']['error_msg'])
-    owner_id = group_response_json['response'][0]['owner_id']
-    media_id = group_response_json['response'][0]['id']
+    group_response_description = group_response.json()
+    if group_response_description.get('error'):
+        raise Exception(group_response_description['error']['error_msg'])
+    owner_id = group_response_description['response'][0]['owner_id']
+    media_id = group_response_description['response'][0]['id']
     return owner_id, media_id
 
 
@@ -65,9 +65,9 @@ def upload_img_on_wall(access_token, group_id, comment, owner_id, media_id):
         'v': 5.131,
     }
     response = requests.post('https://api.vk.com/method/wall.post', params=wall_params)
-    response_json = response.json()
-    if response_json.get('error'):
-        raise Exception(response_json['error']['error_msg'])
+    response_description = response.json()
+    if response_description.get('error'):
+        raise Exception(response_description['error']['error_msg'])
 
 
 def publish_comics(access_token, group_id, user_id, img_name, comment):
