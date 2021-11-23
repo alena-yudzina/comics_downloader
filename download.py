@@ -23,7 +23,7 @@ def get_comics_amount():
     return response.json()['num']
 
 
-def download_comics():
+def download_random_comics():
 
     comics_num = get_comics_amount()
     random_id = random.randint(1, comics_num)
