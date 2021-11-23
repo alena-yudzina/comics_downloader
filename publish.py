@@ -45,7 +45,7 @@ def upload_img_to_server(img_name, access_token, group_id):
     return response_description
 
 
-def upload_img_to_album(access_token, group_id, user_id,
+def add_img_to_album(access_token, group_id, user_id,
                         photo_description, server, hash):
     group_params = {
         'access_token': access_token,
@@ -68,7 +68,7 @@ def upload_img_to_album(access_token, group_id, user_id,
     return owner_id, media_id
 
 
-def upload_img_on_wall(access_token, group_id, comment, owner_id, media_id):
+def add_img_on_wall(access_token, group_id, comment, owner_id, media_id):
     wall_params = {
         'access_token': access_token,
         'owner_id': '-{}'.format(group_id),
@@ -92,10 +92,10 @@ def publish_comics(access_token, group_id, user_id, img_name, comment):
     photo_description = server_response['photo']
     server = server_response['server']
     hash = server_response['hash']
-    owner_id, media_id = upload_img_to_album(
+    owner_id, media_id = add_img_to_album(
         access_token, group_id, user_id, photo_description, server, hash
     )
-    upload_img_on_wall(access_token, group_id, comment, owner_id, media_id)
+    add_img_on_wall(access_token, group_id, comment, owner_id, media_id)
 
 
 def main():
