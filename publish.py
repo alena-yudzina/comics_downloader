@@ -15,10 +15,10 @@ def get_upload_url(access_token, group_id):
     }
     response = requests.get('https://api.vk.com/method/photos.getWallUploadServer', params=params)
     response.raise_for_status()
-    response_json = response.json()
-    if response_json.get('error'):
-        raise Exception(response_json['error']['error_msg'])
-    return response_json['response']['upload_url']
+    response_description = response.json()
+    if response_description.get('error'):
+        raise Exception(response_description['error']['error_msg'])
+    return response_description['response']['upload_url']
 
 
 def upload_img_to_server(img_name, access_token, group_id):
@@ -29,10 +29,10 @@ def upload_img_to_server(img_name, access_token, group_id):
         }
         response = requests.post(url, files=files)
     response.raise_for_status()
-    response_json = response.json()
-    if response_json.get('error'):
-        raise Exception(response_json['error']['error_msg'])
-    return response_json
+    response_description = response.json()
+    if response_description.get('error'):
+        raise Exception(response_description['error']['error_msg'])
+    return response_description
 
 
 def upload_img_to_album(access_token, group_id, user_id, server_response):
