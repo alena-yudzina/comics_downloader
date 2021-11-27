@@ -46,7 +46,7 @@ def upload_img_to_server(img_name, access_token, group_id):
 
 
 def add_img_to_album(access_token, group_id, user_id,
-                        photo_description, server, hash_code):
+                     photo_description, server, hash_code):
     group_params = {
         'access_token': access_token,
         'user_id': user_id,
