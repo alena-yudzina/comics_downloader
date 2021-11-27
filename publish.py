@@ -101,8 +101,8 @@ def publish_comics(vk_access_token, group_id, user_id, img_name, comment):
 def main():
     load_dotenv()
     vk_access_token = os.environ['VK_ACCESS_TOKEN']
-    user_id = os.environ['USER_ID']
-    group_id = os.environ['GROUP_ID']
+    user_id = os.environ['VK_USER_ID']
+    group_id = os.environ['VK_GROUP_ID']
     img_name, comment = download_random_comics()
     try:
         publish_comics(vk_access_token, group_id, user_id, img_name, comment)
