@@ -6,7 +6,7 @@
 
 Создайте файл `.env` и поместите туда значения следующих переменных.
 
-- `ACCESS_TOKEN` - ключ доступа для приложения на права photos, groups, wall и offline
+- `VK_ACCESS_TOKEN` - ключ доступа для приложения на права photos, groups, wall и offline
 - `USER_ID` - ваш ID ВК
 - `GROUP_ID` - ID вашей группы ВК
 
