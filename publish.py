@@ -34,7 +34,7 @@ def get_upload_url(vk_access_token, group_id):
 
 def upload_img_to_server(img_name, vk_access_token, group_id):
     with open(img_name, 'rb') as file:
-        url = get_upload_url(access_token, group_id)
+        url = get_upload_url(vk_access_token, group_id)
         files = {
             'photo': file
         }
@@ -106,10 +106,10 @@ def main():
     img_name, comment = download_random_comics()
     try:
         publish_comics(vk_access_token, group_id, user_id, img_name, comment)
-    except VKError as Err:
-        print('Проблемы с VK:', Err)
-    except requests.exceptions.RequestException as Err:
-        print('Проблемы с соединением:', Err)
+    except VKError as err:
+        print('Проблемы с VK:', err)
+    except requests.exceptions.RequestException as err:
+        print('Проблемы с соединением:', err)
     finally:
         os.remove(img_name)
 
