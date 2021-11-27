@@ -46,14 +46,14 @@ def upload_img_to_server(img_name, access_token, group_id):
 
 
 def add_img_to_album(access_token, group_id, user_id,
-                        photo_description, server, hash):
+                        photo_description, server, hash_code):
     group_params = {
         'access_token': access_token,
         'user_id': user_id,
         'group_id': group_id,
         'photo': photo_description,
         'server': server,
-        'hash': hash,
+        'hash': hash_code,
         'v': 5.131,
     }
     group_response = requests.post(
@@ -91,9 +91,9 @@ def publish_comics(access_token, group_id, user_id, img_name, comment):
     server_response = upload_img_to_server(img_name, access_token, group_id)
     photo_description = server_response['photo']
     server = server_response['server']
-    hash = server_response['hash']
+    hash_code = server_response['hash']
     owner_id, media_id = add_img_to_album(
-        access_token, group_id, user_id, photo_description, server, hash
+        access_token, group_id, user_id, photo_description, server, hash_code
     )
     add_img_on_wall(access_token, group_id, comment, owner_id, media_id)
 
